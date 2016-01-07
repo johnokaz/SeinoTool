@@ -27,17 +27,29 @@ SAR_BINARY_FILE="sar_$EXEC_DATETME.out"
 SAR_TEXT_FILE="sar_$EXEC_DATETME.txt"
 # 圧縮後SARテキストファイル名 
 COMP_SAR_TEXT_FILE="sar_$EXEC_DATETME.txt.tar.gz"
+# SAR情報の取得期間(秒)
+SAR_EXEC_TIME=999
+
+# 開始メッセージ
+echo SAR情報の取得を開始します\(ctl+cで停止\)
 
 # １秒間隔でsar情報の取得
-sar -A -o $SAR_BINARY_FILE 1  > /dev/null
+sar -A -o $SAR_BINARY_FILE 1 $SAR_EXEC_TIME 1>/dev/null 2>&1
 
 # 出力したSARバイナリファイルをテキスト化
-env LANG=C sar -A -f $SAR_BINARY_FILE  > $SAR_TEXT_FILE
+env LANG=C sar -A -f $SAR_BINARY_FILE  > $SAR_TEXT_FILE 1>/dev/null 2>&1
 
 # SAR情報を圧縮
-tar zcvf $COMP_SAR_TEXT_FILE $SAR_TEXT_FILE
+tar zcvf $COMP_SAR_TEXT_FILE $SAR_TEXT_FILE 1>/dev/null 2>&1
 
 # SAテキストファイルを削除
 rm $SAR_TEXT_FILE
+
+# 終了メッセージ
+echo 
+echo SAR情報の取得が終了しました
+echo 出力SARバイナリファイル名: $SAR_BINARY_FILE
+echo 出力SARファイル名: $COMP_SAR_TEXT_FILE
+echo 
 
 exit 0
