@@ -21,17 +21,25 @@
 # 実行日時の取得
 EXEC_DATETME=`date '+%Y%m%d%H%M%S'`
 
+# 実行ファイルのBASEディレクトリ取得
+BASE_DIR=`dirname $0`
+
 # SARバイナリファイル名 
-SAR_BINARY_FILE="sar_$EXEC_DATETME.out"
+SAR_BINARY_FILE="$BASE_DIR/result/sar_$EXEC_DATETME.out"
 # SARテキストファイル名 
-SAR_TEXT_FILE="sar_$EXEC_DATETME.txt"
+SAR_TEXT_FILE="$BASE_DIR/result/sar_$EXEC_DATETME.txt"
 # 圧縮後SARテキストファイル名 
-COMP_SAR_TEXT_FILE="sar_$EXEC_DATETME.txt.tar.gz"
+COMP_SAR_TEXT_FILE="$BASE_DIR/result/sar_$EXEC_DATETME.txt.tar.gz"
 # SAR情報の取得期間(秒)
 SAR_EXEC_TIME=999
 
 # 開始メッセージ
 echo SAR情報の取得を開始します\(ctl+cで停止\)
+
+# 結果ディレクトリの存在確認
+if [ ! -d $BASE_DIR/result ]; then
+    mkdir $BASE_DIR/result
+fi
 
 # １秒間隔でsar情報の取得
 sar -A -o $SAR_BINARY_FILE 1 $SAR_EXEC_TIME 1>/dev/null 2>&1
